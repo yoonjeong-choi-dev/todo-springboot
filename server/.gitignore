@@ -1,2 +1,6 @@
 .gradle
 .idea
+
+# 빌드 파일
+build/
+out/

@@ -2,7 +2,7 @@ package com.yj.service.todo;
 
 import com.yj.domain.todo.TodoItem;
 import com.yj.domain.todo.TodoItemRepository;
-import com.yj.web.dto.TodoUpdateRequestDto;
+import com.yj.web.dto.todo.TodoUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

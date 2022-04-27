@@ -1,0 +1,22 @@
+server:
+  port: 7166
+
+spring:
+  datasource:
+      url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/springbootTodo
+      username: springbootTodoUser
+      password: springbootTodoPassword
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      # ddl-auto : none
+      ddl-auto: update
+    properties:
+      show-sql: true
+  redis:
+    host: locolhost
+    port: 6379
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+jwt:
+  secret: yooneong-choi-jwt-secret-key-for-springboot

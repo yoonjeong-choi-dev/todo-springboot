@@ -1,6 +1,7 @@
 package com.yj.service.member;
 
 
+import com.yj.domain.todo.TodoItemRepository;
 import com.yj.domain.user.Member;
 import com.yj.domain.user.MemberRepository;
 import com.yj.web.dto.member.MemberRegisterRequestDto;
@@ -17,6 +18,7 @@ import java.util.List;
 // 순환 참조를 막기 위해 유저 CRUD 와 스프링 시큐리티 관련 서비스를 분리
 public class MemberService {
 
+    private final TodoItemRepository todoItemRepository;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -46,8 +48,11 @@ public class MemberService {
         return true;
     }
 
+    @Transactional
     public boolean delete(String id) {
         boolean ret = true;
+
+        todoItemRepository.deleteByMemberId(id);
 
         try {
             memberRepository.deleteById(id);

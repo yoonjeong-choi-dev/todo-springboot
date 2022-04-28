@@ -1,5 +1,7 @@
 package com.yj.web;
 
+import com.yj.common.AuthUtil;
+import com.yj.domain.user.Member;
 import com.yj.service.member.MemberService;
 import com.yj.web.dto.member.MemberInfoResponse;
 import com.yj.web.dto.member.MemberRegisterRequestDto;
@@ -7,9 +9,6 @@ import com.yj.web.dto.member.MemberUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
@@ -32,9 +31,19 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<MemberInfoResponse> getMemberData(@PathVariable String id) {
+        Member member = memberService.getMemberData(id);
+        if(member == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(new MemberInfoResponse(member), HttpStatus.OK);
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody MemberUpdateRequestDto requestDto) {
-        checkCurrentUser(id);
+        AuthUtil.checkCurrentUser(id);
 
         HttpStatus status;
         if (memberService.update(id, requestDto)) {
@@ -47,8 +56,8 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id)  {
-        checkCurrentUser(id);
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        AuthUtil.checkCurrentUser(id);
         HttpStatus status;
         if (memberService.delete(id)) {
             status = HttpStatus.NO_CONTENT;
@@ -58,12 +67,4 @@ public class MemberController {
 
         return new ResponseEntity<>(status);
     }
-
-    private void checkCurrentUser(String userId) throws InsufficientAuthenticationException {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(!userDetails.getUsername().equals(userId)){
-            throw new InsufficientAuthenticationException("Unmatched User Id");
-        }
-    }
-
 }

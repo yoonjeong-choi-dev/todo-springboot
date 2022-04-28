@@ -1,5 +1,6 @@
 package com.yj.web;
 
+import com.yj.common.AuthUtil;
 import com.yj.service.todo.TodoService;
 import com.yj.web.dto.todo.TodoCreateRequestDto;
 import com.yj.web.dto.todo.TodoCreateResponseDto;
@@ -21,14 +22,20 @@ import java.util.stream.Collectors;
 public class TodoController {
     private final TodoService todoService;
 
-    @GetMapping
-    public List<TodoResponseDto> getList() {
-        return todoService.getList().stream().map(TodoResponseDto::new).collect(Collectors.toList());
+    @GetMapping("/all")
+    public List<TodoResponseDto> getAllList() {
+        return todoService.getAllList().stream().map(TodoResponseDto::new).collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public List<TodoResponseDto> getListOfMember(@PathVariable(name = "id") String memberId) {
+        return todoService.getList(memberId).stream().map(TodoResponseDto::new).collect(Collectors.toList());
     }
 
     @PostMapping
     public ResponseEntity<TodoCreateResponseDto> create(@RequestBody TodoCreateRequestDto requestDto) {
-        TodoCreateResponseDto dto = new TodoCreateResponseDto(todoService.create(requestDto.getContent()));
+        TodoCreateResponseDto dto = new TodoCreateResponseDto(
+                todoService.create(AuthUtil.getCurrentUser(), requestDto.getContent()));
 
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }

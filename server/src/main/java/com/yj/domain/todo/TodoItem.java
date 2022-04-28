@@ -3,6 +3,7 @@ package com.yj.domain.todo;
 
 import com.sun.istack.NotNull;
 import com.yj.domain.BaseTimeEntity;
+import com.yj.domain.user.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,15 +12,11 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-@ToString
 @Entity
 public class TodoItem extends BaseTimeEntity {
     @Id
@@ -36,7 +33,9 @@ public class TodoItem extends BaseTimeEntity {
     @ColumnDefault("false")
     private boolean completed;
 
-    // TODO : user_id - 외래 키 설정
+    @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     public void update(String content, boolean completed) {
         this.content = content;
@@ -44,7 +43,8 @@ public class TodoItem extends BaseTimeEntity {
     }
 
     @Builder
-    public TodoItem(String content) {
+    public TodoItem(String content, Member member) {
         this.content = content;
+        this.member = member;
     }
 }

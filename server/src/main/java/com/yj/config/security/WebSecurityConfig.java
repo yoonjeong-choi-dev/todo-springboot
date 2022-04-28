@@ -46,6 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
                 .antMatchers("/member/register", "/member/list").permitAll()
+                .antMatchers("/todo/all", "/todo/list").permitAll()
                 .anyRequest().authenticated();
 
         // 인증 관련 에러 핸들러 및 필터 등록

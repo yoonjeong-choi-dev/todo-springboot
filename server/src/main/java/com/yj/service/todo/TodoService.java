@@ -2,6 +2,7 @@ package com.yj.service.todo;
 
 import com.yj.domain.todo.TodoItem;
 import com.yj.domain.todo.TodoItemRepository;
+import com.yj.domain.user.Member;
 import com.yj.web.dto.todo.TodoUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,16 @@ import java.util.UUID;
 public class TodoService {
     private final TodoItemRepository todoItemRepository;
 
-    public List<TodoItem> getList() {
+    public List<TodoItem> getAllList() {
         return todoItemRepository.findAll();
     }
 
-    public TodoItem create(String content) {
-        TodoItem item = TodoItem.builder().content(content).build();
+    public List<TodoItem> getList(String memberId) {
+        return todoItemRepository.findByMemberId(memberId);
+    }
+
+    public TodoItem create(Member member, String content) {
+        TodoItem item = TodoItem.builder().content(content).member(member).build();
         return todoItemRepository.save(item);
     }
 
@@ -40,7 +45,9 @@ public class TodoService {
 
         try {
             todoItemRepository.deleteById(id);
-        } catch (IllegalArgumentException ex) {
+        } catch (Exception ex) {
+            System.out.println(ex.getClass().getName());
+            System.out.println(ex.getMessage());
             ret = false;
         }
 

@@ -54,7 +54,7 @@ public class TodoItemRepositoryTest {
         TodoItem item = items.get(0);
 
         UUID id = item.getId();
-        Timestamp modifiedDate = item.getModifiedDate();
+        Timestamp modifiedDate = item.getModifiedAt();
 
         item.update(item.getContent() + " Update!", !item.isCompleted());
         todoItemRepository.save(item);
@@ -62,7 +62,7 @@ public class TodoItemRepositoryTest {
         item = todoItemRepository.findById(id).orElse(null);
 
         assertNotNull(item);
-        assertFalse(modifiedDate.equals(item.getModifiedDate()));
+        assertFalse(modifiedDate.equals(item.getModifiedAt()));
     }
 
     @Test

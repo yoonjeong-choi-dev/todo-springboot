@@ -14,11 +14,11 @@ import java.sql.Timestamp;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
-    @Column(name = "created_date", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
-    private Timestamp createdDate;
+    private Timestamp createdAt;
 
-    @Column(name = "modified_date", nullable = false)
+    @Column(name = "modified_at", nullable = false)
     @LastModifiedDate
-    private Timestamp modifiedDate;
+    private Timestamp modifiedAt;
 }

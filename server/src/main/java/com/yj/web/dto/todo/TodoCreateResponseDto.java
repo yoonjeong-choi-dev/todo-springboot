@@ -13,6 +13,6 @@ public class TodoCreateResponseDto {
 
     public TodoCreateResponseDto(TodoItem entity) {
         id = entity.getId();
-        createdDate = entity.getCreatedDate();
+        createdDate = entity.getCreatedAt();
     }
 }

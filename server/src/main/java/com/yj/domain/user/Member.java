@@ -14,14 +14,16 @@ import javax.persistence.Id;
 @Entity
 public class Member extends BaseTimeEntity {
     @Id
+    @Column(length = 20)
     private String id;
 
+    @Column(length = 20)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 80)
     private String password;
 
-    @Column(unique = true)
+    @Column(length = 30)
     private String email;
 
     @Column(columnDefinition = "TEXT")

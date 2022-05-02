@@ -17,6 +17,6 @@ public class TodoResponseDto {
         id = entity.getId();
         content = entity.getContent();
         completed = entity.isCompleted();
-        createdDate = entity.getCreatedDate();
+        createdDate = entity.getCreatedAt();
     }
 }

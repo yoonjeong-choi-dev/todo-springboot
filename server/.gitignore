@@ -4,3 +4,6 @@
 # 빌드 파일
 build/
 out/
+
+# 설정 파일
+**/emailSender.properties

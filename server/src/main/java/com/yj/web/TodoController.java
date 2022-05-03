@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,18 +23,17 @@ public class TodoController {
 
     @GetMapping("/all")
     public List<TodoResponseDto> getAllList() {
-        return todoService.getAllList().stream().map(TodoResponseDto::new).collect(Collectors.toList());
+        return todoService.getAllList();
     }
 
     @GetMapping("/{id}")
     public List<TodoResponseDto> getListOfMember(@PathVariable(name = "id") String memberId) {
-        return todoService.getList(memberId).stream().map(TodoResponseDto::new).collect(Collectors.toList());
+        return todoService.getList(memberId);
     }
 
     @PostMapping
     public ResponseEntity<TodoCreateResponseDto> create(@RequestBody TodoCreateRequestDto requestDto) {
-        TodoCreateResponseDto dto = new TodoCreateResponseDto(
-                todoService.create(AuthUtil.getCurrentUser(), requestDto.getContent()));
+        TodoCreateResponseDto dto = todoService.create(AuthUtil.getCurrentUser(), requestDto.getContent());
 
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
@@ -43,7 +41,7 @@ public class TodoController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable UUID id, @RequestBody TodoUpdateRequestDto requestDto) {
         HttpStatus status;
-        if (todoService.update(id, requestDto)) {
+        if (todoService.update(AuthUtil.getCurrentUser(), id, requestDto)) {
             status = HttpStatus.OK;
         } else {
             status = HttpStatus.NOT_FOUND;
@@ -55,7 +53,7 @@ public class TodoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         HttpStatus status;
-        if (todoService.delete(id)) {
+        if (todoService.delete(AuthUtil.getCurrentUser(), id)) {
             status = HttpStatus.NO_CONTENT;
         } else {
             status = HttpStatus.NOT_FOUND;

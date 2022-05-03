@@ -4,6 +4,7 @@ import com.yj.domain.todo.TodoItem;
 import com.yj.domain.user.Member;
 import com.yj.service.todo.TodoService;
 import com.yj.web.dto.member.MemberRegisterRequestDto;
+import com.yj.web.dto.todo.TodoResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -73,7 +74,7 @@ class MemberServiceTest {
 
 
         try {
-            List<TodoItem> deleteTodos = todoService.getList(request.getId());
+            List<TodoResponseDto> deleteTodos = todoService.getList(request.getId());
             assertEquals(0, deleteTodos.size());
         } catch (Exception ex){
             System.out.println("=============================================");

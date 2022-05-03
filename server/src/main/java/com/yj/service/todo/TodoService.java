@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Transaction;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -77,21 +78,28 @@ public class TodoService {
         String todoBaseKey = getTodoKey(memberId);
         Set<String> todoKeys = jedis.keys(todoBaseKey + "*");
 
-        for (String key : todoKeys) jedis.del(key);
+        // 트랜잭션을 이용하여 한 번의 접속으로 모두 삭제
+        Transaction transaction = jedis.multi();
+        for (String key : todoKeys) transaction.del(key);
+        transaction.exec();
     }
 
     private void saveTodoListToRedis(Jedis jedis, String memberId, List<TodoResponseDto> todos) {
         logger.info("Save Todo List To Redis");
         String todoBaseKey = getTodoKey(memberId);
+
         int curIdx = 0;
+        Transaction transaction = jedis.multi();
         for (TodoResponseDto todo : todos) {
             String key = todoBaseKey + curIdx;
-            jedis.hset(key, "id", todo.getId().toString());
-            jedis.hset(key, "content", todo.getContent());
-            jedis.hset(key, "completed", String.valueOf(todo.isCompleted()));
-            jedis.hset(key, "createdAt", todo.getCreatedAt().toString());
+            transaction.hset(key, "id", todo.getId().toString());
+            transaction.hset(key, "content", todo.getContent());
+            transaction.hset(key, "completed", String.valueOf(todo.isCompleted()));
+            transaction.hset(key, "createdAt", todo.getCreatedAt().toString());
             curIdx++;
         }
+
+        transaction.exec();
     }
 
     private String getTodoKey(String memberId) {

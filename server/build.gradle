@@ -46,6 +46,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'com.sendgrid:sendgrid-java:4.9.1'
 
+    implementation 'com.twilio.sdk:twilio:8.30.0'
 
     implementation 'redis.clients:jedis:4.2.2'
 

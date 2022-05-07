@@ -7,3 +7,4 @@ out/
 
 # 설정 파일
 **/emailSender.properties
+**/smsSender.properties

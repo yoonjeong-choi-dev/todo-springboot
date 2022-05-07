@@ -1,5 +1,6 @@
 package com.yj.config;
 
+import com.sendgrid.SendGrid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +12,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 @Configuration
-@PropertySource(value = "emailSender.properties")
+@PropertySource(value = "classpath:emailSender.properties")
 public class MailConfig {
 
     private static final Logger logger = Logger.getLogger(MailConfig.class.getName());
@@ -68,5 +69,13 @@ public class MailConfig {
 
 
         return mailSender;
+    }
+
+    @Value("${SENDGRID_API_KEY}")
+    private String sendgrid_api_key;
+
+    @Bean
+    public SendGrid getSendGrid() {
+        return new SendGrid(sendgrid_api_key);
     }
 }

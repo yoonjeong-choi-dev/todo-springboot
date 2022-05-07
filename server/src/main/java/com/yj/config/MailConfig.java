@@ -72,10 +72,10 @@ public class MailConfig {
     }
 
     @Value("${SENDGRID_API_KEY}")
-    private String sendgrid_api_key;
+    private String sendgridApiKey;
 
     @Bean
     public SendGrid getSendGrid() {
-        return new SendGrid(sendgrid_api_key);
+        return new SendGrid(sendgridApiKey);
     }
 }

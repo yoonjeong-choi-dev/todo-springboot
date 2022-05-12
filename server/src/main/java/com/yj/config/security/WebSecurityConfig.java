@@ -44,6 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 접근 권한 설정 : 토큰 발급 요청은 허용
         httpSecurity.authorizeRequests()
+                .antMatchers("/localtest/**").permitAll()
                 .antMatchers("/auth/login").permitAll()
                 .antMatchers("/member/register", "/member/list").permitAll()
                 .antMatchers("/todo/all", "/todo/list").permitAll()

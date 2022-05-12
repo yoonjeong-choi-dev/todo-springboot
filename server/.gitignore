@@ -8,3 +8,6 @@ out/
 # 설정 파일
 **/emailSender.properties
 **/smsSender.properties
+
+# GCP API Key
+**/springboot-todo-app-pub-sub-key.json

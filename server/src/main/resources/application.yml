@@ -3,10 +3,10 @@ server:
 
 spring:
   datasource:
-      url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/springbootTodo
-      username: springbootTodoUser
-      password: springbootTodoPassword
-      driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/springbootTodo
+    username: springbootTodoUser
+    password: springbootTodoPassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       # ddl-auto : none
@@ -27,5 +27,14 @@ spring:
         min-idle: 1
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  cloud:
+    gcp:
+      project-id: springboot-todo-app
+      topic-id: todo_create
+      subscription-id: todo_create-sub
+      topic-name: projects/springboot-todo-app/topics/todo_create
+      credentials:
+        location: classpath:springboot-todo-app-pub-sub-key.json
+
 jwt:
   secret: yooneong-choi-jwt-secret-key-for-springboot

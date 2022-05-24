@@ -33,6 +33,17 @@ public class MemberService {
         return memberRepository.getById(id);
     }
 
+    public Member getByCredential(String id, String password) {
+        Member member = memberRepository.findById(id).orElse(null);
+
+        // 유저의 비밀번호 검증
+        if(member != null && passwordEncoder.matches(password, member.getPassword())) {
+            return member;
+        } else {
+            return null;
+        }
+    }
+
     public List<Member> getList() {
         return memberRepository.findAll();
     }

@@ -1,6 +1,5 @@
 package com.yj.web;
 
-import com.yj.common.AuthUtil;
 import com.yj.service.todo.TodoService;
 import com.yj.web.dto.todo.TodoCreateRequestDto;
 import com.yj.web.dto.todo.TodoCreateResponseDto;
@@ -10,6 +9,7 @@ import com.yj.web.dto.todo.TodoUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,16 +32,16 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<TodoCreateResponseDto> create(@RequestBody TodoCreateRequestDto requestDto) {
-        TodoCreateResponseDto dto = todoService.create(AuthUtil.getCurrentUser(), requestDto.getContent());
+    public ResponseEntity<TodoCreateResponseDto> create(@AuthenticationPrincipal String memberId, @RequestBody TodoCreateRequestDto requestDto) {
+        TodoCreateResponseDto dto = todoService.create(memberId, requestDto.getContent());
 
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable UUID id, @RequestBody TodoUpdateRequestDto requestDto) {
+    public ResponseEntity<Void> update(@AuthenticationPrincipal String memberId, @PathVariable UUID id, @RequestBody TodoUpdateRequestDto requestDto) {
         HttpStatus status;
-        if (todoService.update(AuthUtil.getCurrentUser(), id, requestDto)) {
+        if (todoService.update(memberId, id, requestDto)) {
             status = HttpStatus.OK;
         } else {
             status = HttpStatus.NOT_FOUND;
@@ -51,9 +51,9 @@ public class TodoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal String memberId, @PathVariable UUID id) {
         HttpStatus status;
-        if (todoService.delete(AuthUtil.getCurrentUser(), id)) {
+        if (todoService.delete(memberId, id)) {
             status = HttpStatus.NO_CONTENT;
         } else {
             status = HttpStatus.NOT_FOUND;

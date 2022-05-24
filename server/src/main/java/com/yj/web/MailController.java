@@ -1,11 +1,11 @@
 package com.yj.web;
 
-import com.yj.common.AuthUtil;
 import com.yj.service.mail.MailService;
 import com.yj.web.dto.email.EmailSendResultDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,9 +25,8 @@ public class MailController {
     private final MailService mailService;
 
     @PostMapping("todo")
-    public ResponseEntity<?> sendTodoData() throws ExecutionException, InterruptedException {
-
-        String memberId = AuthUtil.getCurrentUser().getId();
+    public ResponseEntity<?> sendTodoData(@AuthenticationPrincipal String memberId)
+            throws ExecutionException, InterruptedException {
         CompletableFuture<EmailSendResultDTO> future = mailService.sendTodoData(memberId);
 
         future.join();

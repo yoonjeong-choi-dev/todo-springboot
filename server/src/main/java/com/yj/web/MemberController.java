@@ -1,6 +1,5 @@
 package com.yj.web;
 
-import com.yj.common.AuthUtil;
 import com.yj.domain.user.Member;
 import com.yj.service.member.MemberService;
 import com.yj.web.dto.member.MemberInfoResponse;
@@ -9,6 +8,7 @@ import com.yj.web.dto.member.MemberUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
@@ -34,7 +34,7 @@ public class MemberController {
     @GetMapping("/{id}")
     public ResponseEntity<MemberInfoResponse> getMemberData(@PathVariable String id) {
         Member member = memberService.getMemberData(id);
-        if(member == null) {
+        if (member == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             return new ResponseEntity<>(new MemberInfoResponse(member), HttpStatus.OK);
@@ -42,11 +42,13 @@ public class MemberController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody MemberUpdateRequestDto requestDto) {
-        AuthUtil.checkCurrentUser(id);
+    public ResponseEntity<Void> update(@AuthenticationPrincipal String memberId,
+                                       @PathVariable String id, @RequestBody MemberUpdateRequestDto requestDto) {
 
         HttpStatus status;
-        if (memberService.update(id, requestDto)) {
+        if (!memberId.equals(id)) {
+            status = HttpStatus.BAD_REQUEST;
+        } else if (memberService.update(id, requestDto)) {
             status = HttpStatus.OK;
         } else {
             status = HttpStatus.NOT_FOUND;
@@ -56,10 +58,11 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        AuthUtil.checkCurrentUser(id);
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal String memberId, @PathVariable String id) {
         HttpStatus status;
-        if (memberService.delete(id)) {
+        if (!memberId.equals(id)) {
+            status = HttpStatus.BAD_REQUEST;
+        } else if (memberService.delete(id)) {
             status = HttpStatus.NO_CONTENT;
         } else {
             status = HttpStatus.NOT_FOUND;

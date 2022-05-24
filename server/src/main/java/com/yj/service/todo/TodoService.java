@@ -106,7 +106,8 @@ public class TodoService {
         return memberId + ":todo:";
     }
 
-    public TodoCreateResponseDto create(Member member, String content) {
+    public TodoCreateResponseDto create(String memberId, String content) {
+        Member member = Member.builder().id(memberId).build();
         TodoItem item = TodoItem.builder().content(content).member(member).build();
         updateRedisModifiedKey(member.getId());
 
@@ -114,7 +115,8 @@ public class TodoService {
     }
 
     @Transactional
-    public boolean update(Member member, UUID id, TodoUpdateRequestDto requestDto) {
+    public boolean update(String memberId, UUID id, TodoUpdateRequestDto requestDto) {
+        Member member = Member.builder().id(memberId).build();
         TodoItem item = todoItemRepository.findById(id).orElse(null);
         if (item == null || !item.getMember().getId().equals(member.getId())) return false;
 
@@ -124,7 +126,8 @@ public class TodoService {
         return true;
     }
 
-    public boolean delete(Member member, UUID id) {
+    public boolean delete(String memberId, UUID id) {
+        Member member = Member.builder().id(memberId).build();
         TodoItem item = todoItemRepository.findById(id).orElse(null);
         if (item == null || !item.getMember().getId().equals(member.getId())) return false;
 

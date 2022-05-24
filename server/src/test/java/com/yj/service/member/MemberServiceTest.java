@@ -56,7 +56,7 @@ class MemberServiceTest {
         int insertTodoNum = 5;
 
         for (int i = 0; i < insertTodoNum; i++) {
-            todoService.create(member, String.format("Test Todo %d", i + 1));
+            todoService.create(member.getId(), String.format("Test Todo %d", i + 1));
         }
 
         memberService.delete(request.getId());

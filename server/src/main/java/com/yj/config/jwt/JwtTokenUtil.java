@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-@RequiredArgsConstructor
+@Slf4j
 @Component
 public class JwtTokenUtil {
     public static final long JWT_TOKEN_VALIDITY_MILLISECONDS = 5 * 60 * 60 * 1000L;
@@ -21,47 +22,30 @@ public class JwtTokenUtil {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    public String getUserNameFromToken(String token) {
-        return getClaimFromToken(token, Claims::getSubject);
-    }
+    public String generateToken(String userId) {
+        // 토큰 발행 시간 및 만료 시간
+        Date issuedTime = new Date();
+        Date expiredDate = new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY_MILLISECONDS);
 
-    public Date getExpirationDateFromToken(String token) {
-        return getClaimFromToken(token, Claims::getExpiration);
-    }
-
-    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = getAllClaimsFromToken(token);
-        return claimsResolver.apply(claims);
-    }
-
-    private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
-    }
-
-    private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
-    }
-
-    public String generateToken(UserDetails userDetails) {
-        // 우선은 유저 이름만 이용하여 생성
-        return generateToken(new HashMap<>(), userDetails.getUsername());
-    }
-
-    private String generateToken(Map<String, Object> claims, String subject) {
-        // 커스텀 정보를 claims 객체에 저장하여, 커스텀 정보 및 유저 이름을 이용하여 토큰 생성
-        // 토큰 생성 시 사용되는 비밀키 및 알고리즘 설정
+        // 토큰 생성
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY_MILLISECONDS))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .setSubject(userId)
+                .setIssuer("Todo App")
+                .setIssuedAt(issuedTime)
+                .setExpiration(expiredDate)
                 .compact();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String userName = getUserNameFromToken(token);
-        return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public String validateAndGetUserId(String token) {
+        // Base64 디코딩 후, 서명 알고리즘을 이용하여 토큰 유효성 확인
+        // 유효하지 않은 경우 예외 발생
+        // 유효한 경우 유저의 아이디 반환
+        Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
     }
 }

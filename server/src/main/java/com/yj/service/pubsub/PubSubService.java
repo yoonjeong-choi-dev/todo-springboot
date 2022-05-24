@@ -13,6 +13,7 @@ import com.google.pubsub.v1.TopicName;
 import com.yj.config.GCPCredentialProvider;
 import com.yj.dto.pubsub.PubSubMessageDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +23,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class PubSubService {
-
-    private static final Logger logger = Logger.getLogger(PubSubService.class.getName());
 
     @Value("${spring.cloud.gcp.project-id}")
     private String projectId;
@@ -54,11 +54,11 @@ public class PubSubService {
 
             ApiFuture<String> messageIdFuture = publisher.publish(pubsubMessage);
             messageId = messageIdFuture.get();
-            logger.info("Published Message Id : " + messageId);
+            log.info("Published Message Id : " + messageId);
 
         } catch (Exception e) {
             e.printStackTrace();
-            logger.warning(e.getMessage());
+            log.warn(e.getMessage());
         } finally {
             if (publisher != null) {
                 publisher.shutdown();
@@ -75,8 +75,8 @@ public class PubSubService {
 
         MessageReceiver receiver =
                 (PubsubMessage message, AckReplyConsumer consumer) -> {
-                    logger.info("Id : " + message.getMessageId());
-                    logger.info("Data : " + message.getData().toStringUtf8());
+                    log.info("Id : " + message.getMessageId());
+                    log.info("Data : " + message.getData().toStringUtf8());
 
                     PubSubMessageDto dto = gson.fromJson(message.getData().toStringUtf8(), PubSubMessageDto.class);
                     result.add(dto);
@@ -89,10 +89,10 @@ public class PubSubService {
             subscriber = Subscriber.newBuilder(subscriptionName, receiver).setCredentialsProvider(credentialProvider).build();
 
             subscriber.startAsync().awaitRunning();
-            logger.info("Listening for message on " + subscriptionName.toString());
+            log.info("Listening for message on " + subscriptionName.toString());
             subscriber.awaitTerminated(30, TimeUnit.SECONDS);
         } catch (TimeoutException e) {
-            logger.info("Time out for receiving");
+            log.info("Time out for receiving");
             subscriber.stopAsync();
         }
 

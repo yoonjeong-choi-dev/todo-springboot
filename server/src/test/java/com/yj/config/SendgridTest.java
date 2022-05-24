@@ -7,19 +7,18 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
+@Slf4j
 @SpringBootTest
 @ContextConfiguration
 public class SendgridTest {
-
-    private static final Logger logger = Logger.getLogger(SendgridTest.class.getName());
 
     @Autowired
     SendGrid sendGrid;
@@ -38,13 +37,13 @@ public class SendgridTest {
             request.setEndpoint("mail/send");
             request.setBody(mail.build());
             Response response = sendGrid.api(request);
-            logger.info("Sending to... " + to.getEmail());
-            logger.info(String.valueOf(response.getStatusCode()));
-            logger.info(String.valueOf(response.getBody()));
-            logger.info(String.valueOf(response.getHeaders()));
+            log.info("Sending to... " + to.getEmail());
+            log.info(String.valueOf(response.getStatusCode()));
+            log.info(String.valueOf(response.getBody()));
+            log.info(String.valueOf(response.getHeaders()));
         } catch (IOException ex) {
             ex.printStackTrace();
-            logger.warning(ex.getMessage());
+            log.warn(ex.getMessage());
         }
     }
 
@@ -62,12 +61,12 @@ public class SendgridTest {
             request.setEndpoint("mail/send");
             request.setBody(mail.build());
             Response response = sendGrid.api(request);
-            logger.info(String.valueOf(response.getStatusCode()));
-            logger.info(String.valueOf(response.getBody()));
-            logger.info(String.valueOf(response.getHeaders()));
+            log.info(String.valueOf(response.getStatusCode()));
+            log.info(String.valueOf(response.getBody()));
+            log.info(String.valueOf(response.getHeaders()));
         } catch (IOException ex) {
             ex.printStackTrace();
-            logger.warning(ex.getMessage());
+            log.warn(ex.getMessage());
         }
     }
 }

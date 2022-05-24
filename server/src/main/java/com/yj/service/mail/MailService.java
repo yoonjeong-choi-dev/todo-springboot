@@ -6,6 +6,7 @@ import com.yj.domain.user.Member;
 import com.yj.domain.user.MemberRepository;
 import com.yj.dto.email.EmailSendResultDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,10 +18,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MailService {
-    private static final Logger logger = Logger.getLogger(MailService.class.getName());
 
     private final JavaMailSender mailSender;
     private final TodoItemRepository todoItemRepository;
@@ -45,13 +46,13 @@ public class MailService {
 
         EmailSendResultDTO result = null;
         try {
-            logger.info("Send email...");
+            log.info("Send email...");
             mailSender.send(message);
-            logger.info("Success to send...");
+            log.info("Success to send...");
 
             result = new EmailSendResultDTO(200, "Success to send mail to " + member.getEmail());
         } catch (MailException ex) {
-            logger.warning(ex.getMessage());
+            log.warn(ex.getMessage());
             result = new EmailSendResultDTO(500, "Some error in email service");
         }
 

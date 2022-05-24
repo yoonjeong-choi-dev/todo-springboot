@@ -8,19 +8,18 @@ import com.yj.dto.pubsub.PubSubMessageDto;
 import com.yj.dto.pubsub.MessageQueueSchema;
 import com.yj.dto.pubsub.PushType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.logging.Logger;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/localtest")
 public class LocalTestController {
-
-    private static final Logger logger = Logger.getLogger(LocalTestController.class.getName());
 
     private final PubSubTemplate pubSubTemplate;
     private final ObjectMapper objectMapper;
@@ -43,7 +42,7 @@ public class LocalTestController {
                 .build();
 
         String message = objectMapper.writeValueAsString(queueSchema);
-        logger.info("Push Message : " + message);
+        log.info("Push Message : " + message);
 
         pubSubTemplate.publish(topicName, message);
         return ResponseEntity.ok("Success to publish");
@@ -55,7 +54,7 @@ public class LocalTestController {
             pubSubService.sendMessage(contentDto);
             //pubSubService.getMessage();
         } catch (InterruptedException e) {
-            logger.warning(e.getMessage());
+            log.warn(e.getMessage());
             e.printStackTrace();
         }
         return ResponseEntity.ok("Success to publish");

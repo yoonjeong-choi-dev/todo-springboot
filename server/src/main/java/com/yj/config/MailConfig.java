@@ -1,6 +1,7 @@
 package com.yj.config;
 
 import com.sendgrid.SendGrid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,13 +10,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
-import java.util.logging.Logger;
 
+@Slf4j
 @Configuration
 @PropertySource(value = "classpath:emailSender.properties")
 public class MailConfig {
 
-    private static final Logger logger = Logger.getLogger(MailConfig.class.getName());
 
     @Value("${sender.host}")
     private String host;
@@ -44,13 +44,13 @@ public class MailConfig {
     @Bean
     public JavaMailSender getJavaMailSender() {
 
-//        logger.info("================================================");
-//        logger.info(host);
-//        logger.info(username);
-//        logger.info(protocol);
-//        logger.info(auth);
-//        logger.info(tls);
-//        logger.info("================================================");
+//        log.info("================================================");
+//        log.info(host);
+//        log.info(username);
+//        log.info(protocol);
+//        log.info(auth);
+//        log.info(tls);
+//        log.info("================================================");
 
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 

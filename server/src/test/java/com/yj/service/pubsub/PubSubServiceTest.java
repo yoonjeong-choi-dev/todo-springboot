@@ -1,6 +1,7 @@
 package com.yj.service.pubsub;
 
 import com.yj.dto.pubsub.PubSubMessageDto;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,11 +15,10 @@ import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
 class PubSubServiceTest {
-
-    private static final Logger logger = Logger.getLogger(PubSubService.class.getName());
 
     @Autowired
     PubSubService pubSubService;
@@ -42,7 +42,7 @@ class PubSubServiceTest {
             String id = pubSubService.sendMessage(msg);
 
             assertNotNull(id);
-            logger.info("Result Message : " + id);
+            log.info("Result Message : " + id);
         }
     }
 
@@ -53,10 +53,10 @@ class PubSubServiceTest {
         assertNotNull(messageList);
 
         for (PubSubMessageDto msg : messageList) {
-            logger.info("Title : " + msg.getTitle());
-            logger.info("Body : " + msg.getBody());
-            logger.info("Device : " + msg.getDeviceToken());
-            logger.info("Data : " + msg.getData().toString());
+            log.info("Title : " + msg.getTitle());
+            log.info("Body : " + msg.getBody());
+            log.info("Device : " + msg.getDeviceToken());
+            log.info("Data : " + msg.getData().toString());
         }
     }
 }

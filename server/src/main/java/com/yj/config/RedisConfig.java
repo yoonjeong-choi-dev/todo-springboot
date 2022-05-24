@@ -2,6 +2,7 @@ package com.yj.config;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,12 +12,11 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
+@Slf4j
 @RequiredArgsConstructor
 @Configuration
 public class RedisConfig {
-    private static final Logger logger = Logger.getLogger(RedisConfig.class.getName());
 
     @Value("${spring.redis.host}")
     private String host;
@@ -41,7 +41,7 @@ public class RedisConfig {
     public Jedis jedis() {
         Jedis jedis = new Jedis(host, port);
         jedis.auth(password);
-        logger.info(jedis.ping());
+        log.info(jedis.ping());
 
         return jedis;
     }
@@ -63,9 +63,9 @@ public class RedisConfig {
             try {
                 Jedis jedis = jedisPool.getResource();
                 minIdleJedisList.add(jedis);
-                logger.info(String.format("[%d] Jedis connection : %s", i, jedis.ping()));
+                log.info(String.format("[%d] Jedis connection : %s", i, jedis.ping()));
             } catch (Exception e) {
-                logger.warning(e.getMessage());
+                log.warn(e.getMessage());
             }
         }
 
@@ -74,7 +74,7 @@ public class RedisConfig {
                 Jedis jedis = minIdleJedisList.get(i);
                 jedis.close();
             } catch (Exception e) {
-                logger.warning(e.getMessage());
+                log.warn(e.getMessage());
             }
         }
 

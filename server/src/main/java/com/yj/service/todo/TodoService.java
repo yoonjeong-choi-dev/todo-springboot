@@ -7,6 +7,7 @@ import com.yj.dto.todo.TodoCreateResponseDto;
 import com.yj.dto.todo.TodoResponseDto;
 import com.yj.dto.todo.TodoUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
@@ -18,14 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class TodoService {
 
-    private static final Logger logger = Logger.getLogger(TodoService.class.getName());
 
     private final TodoItemRepository todoItemRepository;
     private final JedisPool jedisPool;
@@ -40,13 +40,13 @@ public class TodoService {
         Jedis jedis = jedisPool.getResource();
         if (jedis.exists(modifiedKey) && jedis.get(modifiedKey).equals("0")) {
             // 캐시 데이터 사용
-            logger.info("Use Cache Data");
+            log.info("Use Cache Data");
             ret = getTodoListFromRedis(jedis, memberId);
         } else {
             // DB 조회 및 캐시 저장
             ret = todoItemRepository.findByMemberId(memberId).stream().map(TodoResponseDto::new).collect(Collectors.toList());
 
-            logger.info("Save Data to Cache");
+            log.info("Save Data to Cache");
             deleteTodoListFromRedis(jedis, memberId);
             saveTodoListToRedis(jedis, memberId, ret);
             jedis.set(modifiedKey, "0");
@@ -74,7 +74,7 @@ public class TodoService {
     }
 
     private void deleteTodoListFromRedis(Jedis jedis, String memberId) {
-        logger.info("Delete All Todo List From Redis");
+        log.info("Delete All Todo List From Redis");
         String todoBaseKey = getTodoKey(memberId);
         Set<String> todoKeys = jedis.keys(todoBaseKey + "*");
 
@@ -85,7 +85,7 @@ public class TodoService {
     }
 
     private void saveTodoListToRedis(Jedis jedis, String memberId, List<TodoResponseDto> todos) {
-        logger.info("Save Todo List To Redis");
+        log.info("Save Todo List To Redis");
         String todoBaseKey = getTodoKey(memberId);
 
         int curIdx = 0;

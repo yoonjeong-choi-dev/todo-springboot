@@ -2,6 +2,7 @@ package com.yj.controller;
 
 import com.google.gson.Gson;
 import com.yj.dto.pubsub.PubSubMessageDto;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,11 +16,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
 class LocalTestControllerTest {
-
-    private static final Logger logger = Logger.getLogger(LocalTestControllerTest.class.getName());
 
     private static final String baseUrl = "/localtest/";
 
@@ -38,7 +38,7 @@ class LocalTestControllerTest {
 
 
         String jsonStr = gson.toJson(request);
-        logger.info("Request JSON : " + jsonStr);
+        log.info("Request JSON : " + jsonStr);
 
         try {
             mockMvc.perform(
@@ -47,7 +47,7 @@ class LocalTestControllerTest {
                     .andDo(print());
         } catch (Exception e) {
             e.printStackTrace();
-            logger.warning(e.getMessage());
+            log.warn(e.getMessage());
         }
     }
 }

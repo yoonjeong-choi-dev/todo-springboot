@@ -3,17 +3,17 @@ package com.yj.config;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.util.logging.Logger;
 
+@Slf4j
 @Component
 @PropertySource(value = "classpath:smsSender.properties")
 public class TwilioSMSSender {
-
-    private static final Logger logger = Logger.getLogger(TwilioSMSSender.class.getName());
 
     private final String senderNumber;
 
@@ -23,23 +23,23 @@ public class TwilioSMSSender {
 
         this.senderNumber = senderNumber;
 
-//        logger.info("================================================");
-//        logger.info(accountSid);
-//        logger.info(authToken);
-//        logger.info(senderNumber);
-//        logger.info("================================================");
+//        log.info("================================================");
+//        log.info(accountSid);
+//        log.info(authToken);
+//        log.info(senderNumber);
+//        log.info("================================================");
 
         Twilio.init(accountSid, authToken);
     }
 
     public void sendMessage(String phoneNumber, String message) {
-        logger.info("Sending message to " + phoneNumber);
+        log.info("Sending message to " + phoneNumber);
         Message client = Message.creator(
                 new PhoneNumber(phoneNumber),
                 new PhoneNumber(senderNumber),
                 message
         ).create();
-        logger.info("Success to send!");
+        log.info("Success to send!");
     }
 
 }

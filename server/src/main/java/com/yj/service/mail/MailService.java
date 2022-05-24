@@ -4,7 +4,7 @@ import com.yj.domain.todo.TodoItem;
 import com.yj.domain.todo.TodoItemRepository;
 import com.yj.domain.user.Member;
 import com.yj.domain.user.MemberRepository;
-import com.yj.web.dto.email.EmailSendResultDTO;
+import com.yj.dto.email.EmailSendResultDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;

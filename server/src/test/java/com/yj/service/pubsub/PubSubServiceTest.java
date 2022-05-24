@@ -1,6 +1,6 @@
 package com.yj.service.pubsub;
 
-import com.yj.web.dto.pubsub.PubSubMessageDto;
+import com.yj.dto.pubsub.PubSubMessageDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

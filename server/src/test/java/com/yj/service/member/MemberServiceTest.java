@@ -1,10 +1,9 @@
 package com.yj.service.member;
 
-import com.yj.domain.todo.TodoItem;
 import com.yj.domain.user.Member;
 import com.yj.service.todo.TodoService;
-import com.yj.web.dto.member.MemberRegisterRequestDto;
-import com.yj.web.dto.todo.TodoResponseDto;
+import com.yj.dto.member.MemberRegisterRequestDto;
+import com.yj.dto.todo.TodoResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,10 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 import javax.transaction.Transactional;
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;

@@ -11,7 +11,7 @@ import com.google.pubsub.v1.ProjectSubscriptionName;
 import com.google.pubsub.v1.PubsubMessage;
 import com.google.pubsub.v1.TopicName;
 import com.yj.config.GCPCredentialProvider;
-import com.yj.web.dto.pubsub.PubSubMessageDto;
+import com.yj.dto.pubsub.PubSubMessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

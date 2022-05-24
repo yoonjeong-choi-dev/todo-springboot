@@ -1,4 +1,4 @@
-package com.yj.web.dto.email;
+package com.yj.dto.email;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

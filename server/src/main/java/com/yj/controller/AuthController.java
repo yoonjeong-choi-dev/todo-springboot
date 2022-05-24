@@ -1,9 +1,9 @@
-package com.yj.web;
+package com.yj.controller;
 
 import com.yj.config.jwt.JwtTokenUtil;
 import com.yj.domain.user.Member;
 import com.yj.service.member.MemberService;
-import com.yj.web.dto.member.AuthRequest;
+import com.yj.dto.member.AuthRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

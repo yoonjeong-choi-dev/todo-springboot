@@ -1,4 +1,4 @@
-package com.yj.web.dto.member;
+package com.yj.dto.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

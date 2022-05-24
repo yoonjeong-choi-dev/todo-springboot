@@ -1,7 +1,7 @@
-package com.yj.web;
+package com.yj.controller;
 
 import com.yj.service.mail.MailService;
-import com.yj.web.dto.email.EmailSendResultDTO;
+import com.yj.dto.email.EmailSendResultDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

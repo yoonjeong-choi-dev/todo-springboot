@@ -1,4 +1,4 @@
-package com.yj.web.dto.pubsub;
+package com.yj.dto.pubsub;
 
 import java.util.Arrays;
 

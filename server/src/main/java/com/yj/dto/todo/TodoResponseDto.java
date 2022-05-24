@@ -1,4 +1,4 @@
-package com.yj.web.dto.todo;
+package com.yj.dto.todo;
 
 import com.yj.domain.todo.TodoItem;
 import lombok.Getter;

@@ -1,10 +1,10 @@
-package com.yj.web;
+package com.yj.controller;
 
 import com.yj.domain.user.Member;
 import com.yj.service.member.MemberService;
-import com.yj.web.dto.member.MemberInfoResponse;
-import com.yj.web.dto.member.MemberRegisterRequestDto;
-import com.yj.web.dto.member.MemberUpdateRequestDto;
+import com.yj.dto.member.MemberInfoResponse;
+import com.yj.dto.member.MemberRegisterRequestDto;
+import com.yj.dto.member.MemberUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

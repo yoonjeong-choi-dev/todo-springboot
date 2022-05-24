@@ -1,12 +1,12 @@
-package com.yj.web;
+package com.yj.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.spring.pubsub.core.PubSubTemplate;
 import com.yj.service.pubsub.PubSubService;
-import com.yj.web.dto.pubsub.PubSubMessageDto;
-import com.yj.web.dto.pubsub.MessageQueueSchema;
-import com.yj.web.dto.pubsub.PushType;
+import com.yj.dto.pubsub.PubSubMessageDto;
+import com.yj.dto.pubsub.MessageQueueSchema;
+import com.yj.dto.pubsub.PushType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.yj.web.dto.todo;
+package com.yj.dto.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TodoCreateRequestDto {
-    private String content;
+public class AuthRequest {
+    private String id;
+    private String password;
 }

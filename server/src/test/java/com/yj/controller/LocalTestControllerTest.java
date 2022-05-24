@@ -1,7 +1,7 @@
-package com.yj.web;
+package com.yj.controller;
 
 import com.google.gson.Gson;
-import com.yj.web.dto.pubsub.PubSubMessageDto;
+import com.yj.dto.pubsub.PubSubMessageDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

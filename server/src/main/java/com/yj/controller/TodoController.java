@@ -1,11 +1,11 @@
-package com.yj.web;
+package com.yj.controller;
 
 import com.yj.service.todo.TodoService;
-import com.yj.web.dto.todo.TodoCreateRequestDto;
-import com.yj.web.dto.todo.TodoCreateResponseDto;
-import com.yj.web.dto.todo.TodoResponseDto;
+import com.yj.dto.todo.TodoCreateRequestDto;
+import com.yj.dto.todo.TodoCreateResponseDto;
+import com.yj.dto.todo.TodoResponseDto;
 
-import com.yj.web.dto.todo.TodoUpdateRequestDto;
+import com.yj.dto.todo.TodoUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

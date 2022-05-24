@@ -1,4 +1,4 @@
-package com.yj.web.dto.todo;
+package com.yj.dto.todo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

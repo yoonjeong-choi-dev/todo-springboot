@@ -1,5 +1,7 @@
 package com.yj.service.todo;
 
+import com.yj.common.exceptions.ContentNotFoundException;
+import com.yj.common.exceptions.NotAuthorizedException;
 import com.yj.domain.todo.TodoItem;
 import com.yj.domain.todo.TodoItemRepository;
 import com.yj.domain.user.Member;
@@ -115,26 +117,33 @@ public class TodoService {
     }
 
     @Transactional
-    public boolean update(String memberId, UUID id, TodoUpdateRequestDto requestDto) {
-        Member member = Member.builder().id(memberId).build();
+    public void update(String memberId, UUID id, TodoUpdateRequestDto requestDto) {
         TodoItem item = todoItemRepository.findById(id).orElse(null);
-        if (item == null || !item.getMember().getId().equals(member.getId())) return false;
+
+        if (item == null) {
+            throw new ContentNotFoundException("No corresponding content with id : " + id);
+        }
+
+        if (!item.getMember().getId().equals(memberId)) {
+            throw new NotAuthorizedException("You are not the owner of the todo content");
+        }
 
         item.update(requestDto.getContent(), requestDto.isCompleted());
-        updateRedisModifiedKey(member.getId());
-
-        return true;
+        updateRedisModifiedKey(memberId);
     }
 
-    public boolean delete(String memberId, UUID id) {
-        Member member = Member.builder().id(memberId).build();
+    public void delete(String memberId, UUID id) {
         TodoItem item = todoItemRepository.findById(id).orElse(null);
-        if (item == null || !item.getMember().getId().equals(member.getId())) return false;
+
+        if (item == null) {
+            throw new ContentNotFoundException("No corresponding content with id : " + id);
+        }
+        if (!item.getMember().getId().equals(memberId)) {
+            throw new NotAuthorizedException("You are not the owner of the todo content");
+        }
 
         todoItemRepository.deleteById(id);
-        updateRedisModifiedKey(member.getId());
-
-        return true;
+        updateRedisModifiedKey(memberId);
     }
 
 

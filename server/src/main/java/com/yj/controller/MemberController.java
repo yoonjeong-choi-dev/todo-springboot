@@ -1,5 +1,6 @@
 package com.yj.controller;
 
+import com.yj.common.exceptions.NotAuthorizedException;
 import com.yj.domain.user.Member;
 import com.yj.service.member.MemberService;
 import com.yj.dto.member.MemberInfoResponse;
@@ -32,42 +33,29 @@ public class MemberController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MemberInfoResponse> getMemberData(@PathVariable String id) {
+    public ResponseEntity<MemberInfoResponse> getMemberData(@AuthenticationPrincipal String memberId, @PathVariable String id) {
         Member member = memberService.getMemberData(id);
-        if (member == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(new MemberInfoResponse(member), HttpStatus.OK);
-        }
+        return new ResponseEntity<>(new MemberInfoResponse(member), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@AuthenticationPrincipal String memberId,
-                                       @PathVariable String id, @RequestBody MemberUpdateRequestDto requestDto) {
+    public ResponseEntity<?> update(@AuthenticationPrincipal String memberId,
+                                    @PathVariable String id, @RequestBody MemberUpdateRequestDto requestDto) {
 
-        HttpStatus status;
         if (!memberId.equals(id)) {
-            status = HttpStatus.BAD_REQUEST;
-        } else if (memberService.update(id, requestDto)) {
-            status = HttpStatus.OK;
-        } else {
-            status = HttpStatus.NOT_FOUND;
+            throw new NotAuthorizedException("You are not the user to update");
         }
-
-        return new ResponseEntity<>(status);
+        memberService.update(id, requestDto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@AuthenticationPrincipal String memberId, @PathVariable String id) {
-        HttpStatus status;
+    public ResponseEntity<?> delete(@AuthenticationPrincipal String memberId, @PathVariable String id) {
         if (!memberId.equals(id)) {
-            status = HttpStatus.BAD_REQUEST;
-        } else if (memberService.delete(id)) {
-            status = HttpStatus.NO_CONTENT;
-        } else {
-            status = HttpStatus.NOT_FOUND;
+            throw new NotAuthorizedException("You are not the user to delete");
         }
 
-        return new ResponseEntity<>(status);
+        memberService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

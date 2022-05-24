@@ -19,16 +19,10 @@ public class AuthController {
     private final JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest request) throws Exception {
+    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         Member member = memberService.getByCredential(request.getId(), request.getPassword());
 
-        if(member != null) {
-            String token = jwtTokenUtil.generateToken(member.getId());
-            return ResponseEntity.ok(token);
-        } else {
-            String message = "Login Failed";
-            return ResponseEntity.badRequest().body(message);
-        }
+        String token = jwtTokenUtil.generateToken(member.getId());
+        return ResponseEntity.ok(token);
     }
-
 }

@@ -40,25 +40,13 @@ public class TodoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@AuthenticationPrincipal String memberId, @PathVariable UUID id, @RequestBody TodoUpdateRequestDto requestDto) {
-        HttpStatus status;
-        if (todoService.update(memberId, id, requestDto)) {
-            status = HttpStatus.OK;
-        } else {
-            status = HttpStatus.NOT_FOUND;
-        }
-
-        return new ResponseEntity<>(status);
+        todoService.update(memberId, id, requestDto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@AuthenticationPrincipal String memberId, @PathVariable UUID id) {
-        HttpStatus status;
-        if (todoService.delete(memberId, id)) {
-            status = HttpStatus.NO_CONTENT;
-        } else {
-            status = HttpStatus.NOT_FOUND;
-        }
-
-        return new ResponseEntity<>(status);
+        todoService.delete(memberId, id);
+        return ResponseEntity.noContent().build();
     }
 }

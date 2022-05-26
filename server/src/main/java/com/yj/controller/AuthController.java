@@ -2,6 +2,7 @@ package com.yj.controller;
 
 import com.yj.config.jwt.JwtTokenUtil;
 import com.yj.domain.user.Member;
+import com.yj.dto.member.TokenResponseDto;
 import com.yj.service.member.MemberService;
 import com.yj.dto.member.AuthRequest;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class AuthController {
         Member member = memberService.getByCredential(request.getId(), request.getPassword());
 
         String token = jwtTokenUtil.generateToken(member.getId());
-        return ResponseEntity.ok(token);
+        TokenResponseDto response = new TokenResponseDto(token);
+        return ResponseEntity.ok(response);
     }
 }

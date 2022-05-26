@@ -7,6 +7,7 @@ import com.yj.dto.todo.TodoResponseDto;
 
 import com.yj.dto.todo.TodoUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/todo")
@@ -26,8 +28,9 @@ public class TodoController {
         return todoService.getAllList();
     }
 
-    @GetMapping("/{id}")
-    public List<TodoResponseDto> getListOfMember(@PathVariable(name = "id") String memberId) {
+    @GetMapping
+    public List<TodoResponseDto> getListOfMember(@AuthenticationPrincipal String memberId) {
+        log.info("Get todo list owned by " + memberId);
         return todoService.getList(memberId);
     }
 

@@ -15,5 +15,6 @@ import java.sql.Timestamp;
 public class ResponseErrorDTO {
     private String message;
     private HttpStatus status;
+    private String type;
     private Timestamp timestamp;
 }

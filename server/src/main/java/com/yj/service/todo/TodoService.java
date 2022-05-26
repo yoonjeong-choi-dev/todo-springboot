@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 @Service
 public class TodoService {
 
-
     private final TodoItemRepository todoItemRepository;
     private final JedisPool jedisPool;
 
@@ -53,6 +52,8 @@ public class TodoService {
             saveTodoListToRedis(jedis, memberId, ret);
             jedis.set(modifiedKey, "0");
         }
+
+        jedis.close();
 
         return ret;
     }
@@ -153,6 +154,7 @@ public class TodoService {
         if (jedis.exists(modifiedKey)) {
             jedis.set(modifiedKey, "1");
         }
+        jedis.close();
     }
 
     private String redisModifiedKey(String memberId) {
